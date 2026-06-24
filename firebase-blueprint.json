@@ -1,0 +1,86 @@
+{
+  "entities": {
+    "studyCard": {
+      "title": "StudyCard",
+      "description": "Tahák nebo studijní karta uložená z konverzacích se Shate",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unikátní ID karty"
+        },
+        "topic": {
+          "type": "string",
+          "description": "Název tématu taháku"
+        },
+        "content": {
+          "type": "string",
+          "description": "Ultra stručný obsah s body taháku"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Předmět, pod který karta spadá"
+        },
+        "osnova": {
+          "type": "string",
+          "description": "Osnova nebo struktura kurzu/předmětu"
+        },
+        "lessonPlan": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Seznam lekcí nebo dílčích plánů"
+        },
+        "lessonIndex": {
+          "type": "integer",
+          "description": "Index aktuální lekce"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Čas vytvoření karty"
+        },
+        "targetDateStr": {
+          "type": "string",
+          "description": "Specifické datum pro plán ve formátu YYYY-MM-DD"
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID zařízení/uživatele pro zobrazení jeho historie"
+        }
+      },
+      "required": ["topic", "content", "subject", "createdAt", "userId", "targetDateStr"]
+    },
+    "setting": {
+      "title": "Setting",
+      "description": "Globální konfigurace aplikace",
+      "type": "object",
+      "properties": {
+        "apiKey": {
+          "type": "string",
+          "description": "API klíč Gemini"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedBy": {
+          "type": "string"
+        }
+      },
+      "required": ["apiKey"]
+    }
+  },
+  "firestore": {
+    "study-cards/{cardId}": {
+      "schema": "studyCard",
+      "description": "Kolekce všech studijních karet vytvořených hlasovým asistentem"
+    },
+    "settings/{settingId}": {
+      "schema": "setting",
+      "description": "Globální nastavení jako sdílený Gemini API klíč"
+    },
+    "chats/{chatId}": {
+      "description": "Konverzace a poznámky uživatelů"
+    }
+  }
+}

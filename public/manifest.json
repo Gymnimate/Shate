@@ -1,0 +1,107 @@
+{
+  "name": "Shate AI Assistant",
+  "short_name": "Shate",
+  "description": "Real-time AI assistant with camera and voice interaction, powered by Gemini 3.5 Flash Live.",
+  "categories": ["productivity", "utilities", "social"],
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#070913",
+  "theme_color": "#4f5ff7",
+  "orientation": "any",
+  "scope": "./",
+  "id": "shate-ai-assistant",
+  "dir": "ltr",
+  "lang": "cs",
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "display_override": [
+    "standalone",
+    "window-controls-overlay",
+    "minimal-ui"
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/512x512-monochrome.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "monochrome"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Shate Assistant - Desktop View"
+    },
+    {
+      "src": "screenshot-mobile.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Shate Assistant - Mobile View"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ranní rutina",
+      "short_name": "Ranní",
+      "url": "./?panel=morning",
+      "description": "Zobrazit ranní rutinu",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Denní plán",
+      "short_name": "Denní",
+      "url": "./?panel=daily",
+      "description": "Zobrazit denní úkoly",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Večerní rutina",
+      "short_name": "Večerní",
+      "url": "./?panel=evening",
+      "description": "Zobrazit večerní rutinu",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

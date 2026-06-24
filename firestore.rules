@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net & Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Reuseable core identity helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidStudyCard(data) {
+      return data.keys().hasAll(['topic', 'content', 'subject', 'osnova', 'lessonPlan', 'lessonIndex', 'createdAt', 'targetDateStr', 'userId'])
+        && data.keys().size() == 9
+        && data.topic is string
+        && data.topic.size() > 0
+        && data.topic.size() <= 256
+        && data.content is string
+        && data.content.size() > 0
+        && data.content.size() <= 65536
+        && data.subject is string
+        && data.subject.size() <= 128
+        && data.osnova is string
+        && data.osnova.size() <= 4096
+        && (data.lessonPlan == null || (data.lessonPlan is list && data.lessonPlan.size() <= 50 && (data.lessonPlan.size() == 0 || data.lessonPlan[0] is string)))
+        && (data.lessonIndex == null || data.lessonIndex is int)
+        && (data.targetDateStr == null || (data.targetDateStr is string && data.targetDateStr.size() <= 32))
+        && data.userId is string
+        && data.userId.size() > 0
+        && data.userId.size() <= 128;
+    }
+
+    // Rules for Study Cards collection
+    match /study-cards/{cardId} {
+      // Create Study Card
+      allow create: if isValidId(cardId)
+                    && isSignedIn()
+                    && isOwner(request.resource.data.userId)
+                    && isValidStudyCard(request.resource.data)
+                    && request.resource.data.createdAt == request.time;
+
+      // Get Study Card
+      allow get: if isValidId(cardId)
+                  && isSignedIn()
+                  && isOwner(resource.data.userId);
+
+      // List Study Cards
+      allow list: if isSignedIn()
+                  && resource.data.userId == request.auth.uid;
+
+      // Update Study Card
+      allow update: if isValidId(cardId)
+                    && isValidStudyCard(request.resource.data)
+                    && isSignedIn()
+                    && isOwner(resource.data.userId)
+                    && isOwner(request.resource.data.userId)
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['content', 'topic', 'createdAt'])
+                    && request.resource.data.createdAt == request.time;
+
+      // Delete Study Card
+      allow delete: if isValidId(cardId)
+                    && isSignedIn()
+                    && isOwner(resource.data.userId);
+    }
+
+    // Rules for Settings collection (dynamic Gemini API key)
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isSignedIn() && isValidId(settingId);
+    }
+
+    // Rules for Chats and notes collection
+    match /chats/{chatId} {
+      allow create: if isValidId(chatId)
+                    && isSignedIn()
+                    && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if isValidId(chatId)
+                    && isSignedIn()
+                    && resource.data.userId == request.auth.uid;
+    }
+  }
+}

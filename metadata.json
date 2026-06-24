@@ -1,0 +1,11 @@
+{
+  "name": "Shate Edu",
+  "description": "Real-time AI assistant with camera and voice interaction, powered by Gemini 3 Flash Live.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
